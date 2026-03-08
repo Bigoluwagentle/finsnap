@@ -1,70 +1,132 @@
-# Getting Started with Create React App
+# FinSnap — Personal Finance Tracker
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A clean, responsive personal finance tracker built with React. FinSnap helps users visualize their monthly income and expenses, manage budgets, and track spending across categories.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **Dashboard** — Monthly overview with income, expense, and balance stats, a pie chart for expense breakdown by category, and a bar chart showing the last 6 months of income vs expenses
+- **Transactions** — Full transaction history with search, category filter, and month filter. Supports adding, editing, and deleting transactions
+- **Budget** — Set monthly budget limits per category and track how much you've spent vs your limit
+- **Add Transaction** — Simple form to log income or expenses with amount, category, date, payment method, and description
+- **Auth** — Sign up and sign in with per-user data isolation — each account only sees its own transactions
+- **Persistent storage** — All data saved to localStorage, no backend required
+- **Responsive** — Works on desktop, tablet, and mobile
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Tech Stack
 
-### `npm test`
+- React (Create React App)
+- React Router DOM
+- Recharts (pie chart, bar chart)
+- Lucide React (icons)
+- localStorage for persistence
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## Getting Started
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 1. Create the app
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+npx create-react-app finsnap
+cd finsnap
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 2. Install dependencies
 
-### `npm run eject`
+```bash
+npm install react-router-dom recharts lucide-react
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 3. Replace the src folder
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Copy all files from this project into your `src/` folder, replacing the defaults.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### 4. Add the DM Sans font
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+In `public/index.html`, add this inside the `<head>` tag:
 
-## Learn More
+```html
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### 5. Run the app
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+npm start
+```
 
-### Code Splitting
+The app will open at `gentlefinsnapassessment.vercel.app`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+---
 
-### Analyzing the Bundle Size
+## Project Structure
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```
+src/
+├── App.js
+├── App.css
+├── index.js
+├── components/
+│   ├── Sidebar.jsx
+│   └── Header.jsx
+├── pages/
+│   ├── SignIn.jsx
+│   ├── SignUp.jsx
+│   ├── Dashboard.jsx
+│   ├── Transactions.jsx
+│   ├── Budget.jsx
+│   └── AddTransaction.jsx
+├── styles/
+│   ├── auth.css
+│   ├── Dashboard.css
+│   ├── Transactions.css
+│   ├── Budget.css
+│   ├── AddTransaction.css
+│   ├── Sidebar.css
+│   └── Header.css
+└── utils/
+    ├── constants.js
+    └── storage.js
+```
 
-### Making a Progressive Web App
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Categories
 
-### Advanced Configuration
+| Category | Color |
+|---|---|
+| Housing & Utilities | Blue |
+| Food & Dining | Green |
+| Transportation | Yellow |
+| Entertainment | Purple |
+| Health | Red |
+| Shopping | Pink |
+| Education | Cyan |
+| Travel | Orange |
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
+## Future Improvements
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- **Backend integration** — Replace localStorage with a real database (e.g. Firebase, Supabase or write my own backend code using Nodejs) so data persists across devices and browsers
+- **Export to PDF** — Allow users to download a monthly financial report as a PDF
+- **Recurring transactions** — Let users mark transactions as recurring (e.g. monthly rent, subscriptions) so they auto-populate each month
+- **Multiple currencies** — Support different currencies with live exchange rate conversion
+- **Spending insights** — Smart suggestions like "You spent 40% more on food this month than last month"
+- **Transaction attachments** — Let users attach a photo of a receipt to a transaction
+- **Dark/light mode toggle** — Currently dark mode only, add a theme switcher
+- **Category customization** — Let users create, rename, and delete their own categories
+- **Budget alerts** — Send a browser notification when a user is close to or over a budget limit
+- **Data import** — Allow users to import transactions from a bank CSV export
 
-### `npm run build` fails to minify
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Notes
+
+- No backend or database required all data persists via localStorage
+- Each user account stores data separately signing in as a different user shows only their own transactions
+- The app starts with no transactions users add their own data from scratch

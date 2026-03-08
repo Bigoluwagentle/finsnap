@@ -1,0 +1,103 @@
+.auth-page {
+  min-height: 100vh;
+  background: #080f18;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Sans', sans-serif;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  background: #0d1521;
+  border: 1px solid #1e2d3d;
+  border-radius: 14px;
+  padding: 36px;
+  box-sizing: border-box;
+}
+
+.auth-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
+
+.auth-logo-icon {
+  width: 34px;
+  height: 34px;
+  background: #3b82f6;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.auth-logo span { font-size: 18px; font-weight: 700; color: #f1f5f9; }
+
+.auth-heading { font-size: 22px; font-weight: 700; color: #f1f5f9; margin-bottom: 4px; }
+.auth-sub     { font-size: 14px; color: #6b7280; margin-bottom: 24px; }
+
+.auth-error {
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.3);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #fca5a5;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.auth-form { display: flex; flex-direction: column; gap: 16px; }
+
+.auth-field { display: flex; flex-direction: column; gap: 6px; }
+
+.auth-field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.auth-field input {
+  background: #131f2e;
+  border: 1px solid #1e2d3d;
+  border-radius: 8px;
+  padding: 11px 14px;
+  color: #f1f5f9;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 200ms;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.auth-field input:focus { border-color: #3b82f6; }
+.auth-field input::placeholder { color: #374151; }
+
+.auth-btn {
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 4px;
+  width: 100%;
+  transition: opacity 150ms;
+}
+
+.auth-btn:hover { opacity: 0.88; }
+
+.auth-switch { text-align: center; margin-top: 20px; font-size: 14px; color: #6b7280; }
+.auth-switch span { color: #3b82f6; cursor: pointer; font-weight: 600; }
+
+@media (max-width: 480px) {
+  .auth-page { padding: 16px; align-items: flex-start; padding-top: 40px; }
+  .auth-card { padding: 24px 20px; }
+  .auth-heading { font-size: 20px; }
+}

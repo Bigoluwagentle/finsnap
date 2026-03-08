@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Plus, FileDown, Search, MoreHorizontal, Pencil, X } from "lucide-react";
 import Sidebar from "../components/Sidebar";
@@ -8,9 +8,20 @@ import "../styles/Transactions.css";
 
 const PAGE_SIZE = 10;
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 480);
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth <= 480);
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, []);
+  return isMobile;
+}
+
 export default function Transactions({ transactions, deleteTransaction, user, onLogout }) {
-  const navigate = useNavigate();
+  const navigate  = useNavigate();
   const { pathname } = useLocation();
+  const isMobile  = useIsMobile();
 
   const [search,      setSearch]      = useState("");
   const [catFilter,   setCatFilter]   = useState("all");
@@ -88,7 +99,7 @@ export default function Transactions({ transactions, deleteTransaction, user, on
               <Search size={13} className="tx-search-icon" />
               <input
                 className="tx-search"
-                placeholder="Search descriptions, merchants..."
+                placeholder="Search transactions..."
                 value={search}
                 onChange={e => { setSearch(e.target.value); setPage(1); }}
               />
@@ -106,78 +117,83 @@ export default function Transactions({ transactions, deleteTransaction, user, on
             )}
           </div>
 
-          <div className="tx-table-wrap">
-            <table className="tx-table">
-              <thead>
-                <tr className="tx-thead-row">
-                  <th>Date</th>
-                  <th>Description</th>
-                  <th>Category</th>
-                  <th>Method</th>
-                  <th className="tx-right">Amount</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginated.length === 0 && (
-                  <tr><td colSpan={6} className="tx-empty">No transactions found</td></tr>
-                )}
-                {paginated.map(t => {
-                  const cat = getCat(t.category);
-                  return (
-                    <tr key={t.id} className="tx-row">
-                      <td className="tx-cell tx-date">{new Date(t.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</td>
-                      <td className="tx-cell tx-desc">{t.description || cat.label}</td>
-                      <td className="tx-cell"><span className="tx-badge" style={{ background: cat.color + "22", color: cat.color }}>{cat.label.split(" ")[0]}</span></td>
-                      <td className="tx-cell">{t.method}</td>
-                      <td className={`tx-cell tx-right tx-amount ${t.type}`}>{t.type === "income" ? "+" : ""}{fmtAbs(t.amount)}</td>
-                      <td className="tx-cell tx-menu-cell">
-                        <button className="tx-menu-btn" onClick={() => setOpenMenu(openMenu === t.id ? null : t.id)}><MoreHorizontal size={16} /></button>
-                        {openMenu === t.id && (
-                          <div className="tx-menu">
-                            <button className="tx-menu-item" onClick={() => { setOpenMenu(null); navigate("/add-transaction", { state: { editing: t } }); }}><Pencil size={13} />Edit</button>
-                            <button className="tx-menu-item danger" onClick={() => { deleteTransaction(t.id); setOpenMenu(null); }}><X size={13} /> Delete</button>
-                          </div>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-            <Pagination />
-          </div>
-
-          <div className="tx-card-list">
-            {paginated.length === 0 && (
-              <p className="tx-empty">No transactions found</p>
-            )}
-            {paginated.map(t => {
-              const cat  = getCat(t.category);
-              const Icon = cat.icon;
-              return (
-                <div key={t.id} className="tx-card">
-                  <div className="tx-card-left">
-                    <div className="tx-card-icon" style={{ background: cat.color + "22" }}>
-                      <Icon size={17} color={cat.color} />
-                    </div>
-                    <div className="tx-card-info">
-                      <p className="tx-card-desc">{t.description || cat.label}</p>
-                      <div className="tx-card-meta">
-                        <span>{new Date(t.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
-                        <span style={{ color: cat.color }}>· {cat.label.split(" ")[0]}</span>
+          {isMobile ? (
+            <div className="tx-card-list">
+              {paginated.length === 0 && (
+                <p className="tx-empty">No transactions found</p>
+              )}
+              {paginated.map(t => {
+                const cat  = getCat(t.category);
+                const Icon = cat.icon;
+                return (
+                  <div key={t.id} className="tx-card">
+                    <div className="tx-card-left">
+                      <div className="tx-card-icon" style={{ background: cat.color + "22" }}>
+                        <Icon size={17} color={cat.color} />
+                      </div>
+                      <div className="tx-card-info">
+                        <p className="tx-card-desc">{t.description || cat.label}</p>
+                        <p className="tx-card-meta">
+                          {new Date(t.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                          <span style={{ color: cat.color }}> · {cat.label.split(" ")[0]}</span>
+                        </p>
                       </div>
                     </div>
+                    <div className="tx-card-right">
+                      <p className={`tx-card-amount ${t.type}`}>{t.type === "income" ? "+" : ""}{fmtAbs(t.amount)}</p>
+                      <p className="tx-card-method">{t.method}</p>
+                    </div>
                   </div>
-                  <div className="tx-card-right">
-                    <p className={`tx-card-amount ${t.type}`}>{t.type === "income" ? "+" : ""}{fmtAbs(t.amount)}</p>
-                    <p className="tx-card-method">{t.method}</p>
-                  </div>
-                </div>
-              );
-            })}
-            <Pagination />
-          </div>
+                );
+              })}
+              <Pagination />
+            </div>
+          ) : (
+
+            <div className="tx-table-wrap">
+              <table className="tx-table">
+                <thead>
+                  <tr className="tx-thead-row">
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Method</th>
+                    <th className="tx-right">Amount</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginated.length === 0 && (
+                    <tr><td colSpan={6} className="tx-empty">No transactions found</td></tr>
+                  )}
+                  {paginated.map(t => {
+                    const cat = getCat(t.category);
+                    return (
+                      <tr key={t.id} className="tx-row">
+                        <td className="tx-cell tx-date">{new Date(t.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</td>
+                        <td className="tx-cell tx-desc">{t.description || cat.label}</td>
+                        <td className="tx-cell">
+                          <span className="tx-badge" style={{ background: cat.color + "22", color: cat.color }}>{cat.label.split(" ")[0]}</span>
+                        </td>
+                        <td className="tx-cell">{t.method}</td>
+                        <td className={`tx-cell tx-right tx-amount ${t.type}`}>{t.type === "income" ? "+" : ""}{fmtAbs(t.amount)}</td>
+                        <td className="tx-cell tx-menu-cell">
+                          <button className="tx-menu-btn" onClick={() => setOpenMenu(openMenu === t.id ? null : t.id)}><MoreHorizontal size={16} /></button>
+                          {openMenu === t.id && (
+                            <div className="tx-menu">
+                              <button className="tx-menu-item" onClick={() => { setOpenMenu(null); navigate("/add-transaction", { state: { editing: t } }); }}><Pencil size={13} /> Edit</button>
+                              <button className="tx-menu-item danger" onClick={() => { deleteTransaction(t.id); setOpenMenu(null); }}><X size={13} />Delete</button>
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+              <Pagination />
+            </div>
+          )}
 
         </div>
         <footer className="page-footer">© 2026 Gentle FinSnap Assessment. Your financial clarity, simplified.</footer>
